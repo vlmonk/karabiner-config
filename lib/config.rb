@@ -35,8 +35,19 @@ class Config
     ]
   }
 
-  RULE_RU = {
+  RULE_RU_ALT = {
     from: { key_code: "right_alt", modifiers: { optional: ["any"] } },
+    to: [
+      { set_variable: { name: 'caps_lock_pressed', value: 0 } },
+      { select_input_source: { language: "ru" } }
+    ],
+    conditions: [
+      { name: "caps_lock_pressed", type: "variable_if", value: 1 }
+    ]
+  }
+
+  RULE_RU_GUI = {
+    from: { key_code: "right_gui", modifiers: { optional: ["any"] } },
     to: [
       { set_variable: { name: 'caps_lock_pressed', value: 0 } },
       { select_input_source: { language: "ru" } }
@@ -56,8 +67,6 @@ class Config
     }
   end
 
-
-
   def initialize
     @raw = JSON.parse(File.read(path))
     @profile = @raw['profiles'].find { |p| p['name'] == PROFILE_NAME }
@@ -68,7 +77,7 @@ class Config
 
   def install
     @rules << RULE_CS
-    [RULE_EN, RULE_RU].each { |rule| @rules << rule }
+    [RULE_EN, RULE_RU_ALT, RULE_RU_GUI].each { |rule| @rules << rule }
 
     @rules << remap_cs('h', 'left_arrow')
     @rules << remap_cs('j', 'down_arrow')
