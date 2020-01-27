@@ -84,6 +84,9 @@ class Config
     @rules << remap_cs('k', 'up_arrow')
     @rules << remap_cs('l', 'right_arrow')
 
+    %w(q w e r t a s d f g z x c v b 1 2 3 4 5).each { |char| @rules << disable_left_shift(char) }
+    %w(y u i o p open_bracket close_bracket backslash h j k l semicolon quote n m comma period slash 6 7 8 9 0 hyphen equal_sign).each { |char| @rules << disable_right_shift(char) }
+
     @rules << RULE_CLEAR
 
     @profile['complex_modifications']['rules'] << @rules.as_json
@@ -96,5 +99,25 @@ class Config
 
   def path
     File.expand_path(FILE)
+  end
+
+  def disable_left_shift(char)
+    {
+      description: "disable LEFT_SHIFT+#{char}",
+      from: {
+        key_code: char,
+        modifiers: { mandatory: ['left_shift'] }
+      }
+    }
+  end
+
+  def disable_right_shift(char)
+    {
+      description: "disable RIGHT_SHIFT+#{char}",
+      from: {
+        key_code: char,
+        modifiers: { mandatory: ['right_shift'] }
+      }
+    }
   end
 end
