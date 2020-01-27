@@ -14,6 +14,16 @@ class Config
     ]
   }
 
+  RULE_CLEAR = {
+    from: { any: "key_code", modifiers: { optional: ["any"] } },
+    to: [
+      { set_variable: { name: "caps_lock_pressed", value: 0 } }
+    ],
+    conditions: [
+      { name: "caps_lock_pressed", type: "variable_if", value: 1 }
+    ]
+  }
+
   RULE_EN = {
     from: { key_code: "left_gui", modifiers: { optional: ["any"] } },
     to: [
@@ -36,6 +46,16 @@ class Config
     ]
   }
 
+  def remap_cs(from, to)
+    {
+      conditions: [
+        { name: "caps_lock_pressed", type: "variable_if", value: 1 }
+      ],
+      from: { key_code: from },
+      to: [{ key_code: to }]
+    }
+  end
+
 
 
   def initialize
@@ -49,6 +69,13 @@ class Config
   def install
     @rules << RULE_CS
     [RULE_EN, RULE_RU].each { |rule| @rules << rule }
+
+    @rules << remap_cs('h', 'left_arrow')
+    @rules << remap_cs('j', 'down_arrow')
+    @rules << remap_cs('k', 'up_arrow')
+    @rules << remap_cs('l', 'right_arrow')
+
+    @rules << RULE_CLEAR
 
     @profile['complex_modifications']['rules'] << @rules.as_json
 
