@@ -85,7 +85,7 @@ class Config
     @rules << remap_cs('l', 'right_arrow')
 
     %w(q w e r t a s d f g z x c v b 1 2 3 4 5).each { |char| @rules << disable_left_shift(char) }
-    %w(y u i o p close_bracket backslash h j k l semicolon quote n m comma period slash 6 7 8 9 0 hyphen equal_sign).each { |char| @rules << disable_right_shift(char) }
+    %w(y u i o p close_bracket backslash h j k l semicolon quote n m comma period slash 6 7 8 9 hyphen equal_sign).each { |char| @rules << disable_right_shift(char) }
 
     @rules << RULE_CLEAR
 
